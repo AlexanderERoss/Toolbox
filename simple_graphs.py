@@ -1,14 +1,50 @@
 import pyplot from matplotlib as plt
 import math
-def freq_plot(X, range_list, range_max, XLabel, range_min=0, coloring='#5554aa'):
-    n, bins, patches = plt.hist(x=X.apply(lambda x : max(range_min, min(range_max, x))), 
-                                bins=range_list, color=coloring, alpha=0.7, rwidth=0.75)
-    plt.grid(axis='y', alpha=0.75)
-    plt.xlabel(XLabel)
-    plt.ylabel('Frequency')
-    plt.title('Frequency of ' + XLabel)
-    maxfreq = n.max()
-    # Set a clean upper y-axis limit.
-    scale = 10**np.ceil(math.log(maxfreq, 10)-2)
-    plt.ylim(ymax=np.ceil(maxfreq / scale) * scale if maxfreq % 10 else maxfreq + 10)
-    plt.show
+
+# Nested Pie Chart Function (pie_nest(df, inner_col, outer_col))
+def pie_nest(df, inner_col, outer_col, color_palette=[]):
+    '''Note that each type outer col needs to be a subset 
+    of the inner column.
+    Requires pyplot imported as plt'''
+    inner_dist = df[inner_col].value_counts()
+    full_freq = df.groupby([inner_col, outer_col]).size()
+    inner_labels = []
+    inner_freq = []
+    outer_labels = []
+    outer_freq = []
+    for i, v in full_freq.iteritems():
+        if i[0] not in inner_labels:
+            inner_labels.append(i[0])
+            inner_freq.append(inner_dist[i[0]])
+        outer_labels.append(i[1])
+        outer_freq.append(v)
+    # Set up colour scheme
+    if color_palette != []:
+        palette_provided = True
+        colors
+    else:
+        palette_provided = False
+    # Outer Ring plot
+    fig, ax = plt.subplots()
+    ax.axis('equal')
+    if palette_provided:
+        outer_pie, _ = ax.pie(outer_freq, radius=1.3,
+                              labels=outer_labels)#,
+                              #colors=color_pallette)
+    else:
+        outer_pie, _ = ax.pie(outer_freq, radius=1.3,
+                              labels=outer_labels)
+    plt.setp(outer_pie, width=0.3, edgecolor='white')
+    # Inner Ring Plot
+    if palette_provided:
+        inner_pie, _ = ax.pie(inner_freq, radius=1.3-0.3,
+                              labels=inner_labels, 
+                              labeldistance=0.7)
+    else:
+        inner_pie, _ = ax.pie(inner_freq, radius=1.3-0.3,
+                              labels=inner_labels, 
+                              labeldistance=0.7)
+    plt.setp(inner_pie, width =0.4, edgecolor='white')
+    plt.margins(0,0)
+    # Display Plot
+    plt.show() 
