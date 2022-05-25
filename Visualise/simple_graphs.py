@@ -1,6 +1,10 @@
 import pyplot from matplotlib as plt
 import math
 
+# Simple Piechart
+plt.figure(figsize=(width,height))
+plt.pie(list_of_sizes, labels=label_list, startangle=starting_angle_of_chart)
+
 # Function to define colormaps for palettes
 def w2c_colormap(color_code, bins):
     return lsc.from_list(color_code.replace('#','C'), ['#FFFFFF', color_code], bins)

@@ -113,5 +113,3 @@ class StandardAddr:
         self.address_is_valid = road_num != ''
         self.processed_address = proc_addr
 
-print('x')
-print('Give me a shell!!!')
